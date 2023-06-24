@@ -24,7 +24,7 @@
     <version>4.16.0-SNAPSHOT</version>
   </parent>
   <groupId>org.apache.bookkeeper.tests</groupId>
-  <artifactId>tests-parent</artifactId>
+  <artifactId>tests</artifactId>
   <name>Apache BookKeeper :: Tests</name>
 
 
