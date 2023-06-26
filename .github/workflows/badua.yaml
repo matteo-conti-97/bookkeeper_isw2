@@ -25,9 +25,9 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: install badua cli
-        run: mvn install:install-file -DgroupId=br.usp.each.saeg -DartifactId=ba-dua-cli -Dversion=0.4.0 -Dclassifier=all -Dpackaging=jar -Dfile="/home/matteo/IdeaProjects/zookeeper_isw2/jars/ba-dua-cli-0.4.0-all.jar"
+        run: mvn install:install-file -DgroupId=br.usp.each.saeg -DartifactId=ba-dua-cli -Dversion=0.4.0 -Dclassifier=all -Dpackaging=jar -Dfile="./jars/ba-dua-cli-0.4.0-all.jar"
       - name: install badua agent rt
-        run: mvn install:install-file -DgroupId=br.usp.each.saeg -DartifactId=ba-dua-agent-rt -Dversion=0.4.0 -Dclassifier=all -Dpackaging=jar -Dfile="/home/matteo/IdeaProjects/zookeeper_isw2/jars/ba-dua-agent-rt-0.4.0-all.jar"
+        run: mvn install:install-file -DgroupId=br.usp.each.saeg -DartifactId=ba-dua-agent-rt -Dversion=0.4.0 -Dclassifier=all -Dpackaging=jar -Dfile="./jars/ba-dua-agent-rt-0.4.0-all.jar"
       - name: maven verify
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
