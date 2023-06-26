@@ -107,6 +107,7 @@
 
 
   <properties>
+    <!-- OniBaku -->
     <sonar.organization>matteo-conti-972</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/tests/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
@@ -123,6 +124,8 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <javac.target>1.8</javac.target>
     <redirectTestOutputToFile>true</redirectTestOutputToFile>
+    <!-- -->
+
     <testRetryCount>2</testRetryCount>
     <src.dir>src/main/java</src.dir>
     <test.additional.args />
@@ -1318,6 +1321,8 @@
         </plugins>
       </build>
     </profile>
+
+    <!-- OniBaku -->
     <profile>
       <id>jacoco-coverage</id>
       <activation>
@@ -1347,11 +1352,6 @@
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-compiler-plugin</artifactId>
               <version>3.8.1</version>
-            </plugin>
-            <plugin>
-              <groupId>org.sonarsource.scanner.maven</groupId>
-              <artifactId>sonar-maven-plugin</artifactId>
-              <version>3.9.1</version>
             </plugin>
             <plugin>
               <groupId>org.jacoco</groupId>
