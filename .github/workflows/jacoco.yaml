@@ -38,6 +38,6 @@ jobs:
       - name: Upload report
         uses: actions/upload-artifact@v3
         with:
-          name: Bookkepper_report_jacoco
+          name: jacoco-report
           path: tests/target/site/jacoco-aggregate/
           if-no-files-found: error
