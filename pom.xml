@@ -107,6 +107,8 @@
 
 
   <properties>
+    <sonar.organization>matteo-conti-972</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/tests/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     <test.additional.args/>
     <!--
