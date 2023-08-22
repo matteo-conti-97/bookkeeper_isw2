@@ -237,6 +237,12 @@
       <artifactId>awaitility</artifactId>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>ch.qos.reload4j</groupId>
+          <artifactId>reload4j</artifactId>
+          <version>1.2.22</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
   <build>
     <plugins>
