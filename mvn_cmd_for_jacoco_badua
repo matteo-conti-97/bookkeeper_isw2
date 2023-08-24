@@ -1,0 +1,10 @@
+setup badua->
+mvn install:install-file -DgroupId=br.usp.each.saeg -DartifactId=ba-dua-cli -Dversion=0.4.0 -Dclassifier=all -Dpackaging=jar -Dfile="./jars/ba-dua-cli-0.4.0-all.jar"
+mvn install:install-file -DgroupId=br.usp.each.saeg -DartifactId=ba-dua-agent-rt -Dversion=0.4.0 -Dclassifier=all -Dpackaging=jar -Dfile="./jars/ba-dua-agent-rt-0.4.0-all.jar"
+
+
+analyze with badua ->
+mvn clean verify  -P badua-coverage-offline
+
+analyze with jacoco ->
+mvn clean verify sonar:sonar -Dsonar.login=850b8182d9b04417288588527db57f52396a57e5 -P jacoco-coverage-offline
