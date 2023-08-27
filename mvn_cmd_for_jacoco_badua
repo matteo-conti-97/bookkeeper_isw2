@@ -7,4 +7,4 @@ analyze with badua ->
 mvn clean verify  -P badua-coverage-offline
 
 analyze with jacoco ->
-mvn clean verify sonar:sonar -Dsonar.login=850b8182d9b04417288588527db57f52396a57e5 -P jacoco-coverage-offline
+mvn clean verify sonar:sonar -Dsonar.login=242c9ea28d460a91ae9944f43100fd1676c62b91 -P jacoco-coverage-offline
