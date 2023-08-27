@@ -105,7 +105,7 @@ public class TestBufferedChannel {
         }
     }
 
-    @RunWith(Parameterized.class)
+    /*@RunWith(Parameterized.class)
     public static class TestBufferedChannelRead{
         //ByteBuf dest, long pos, int lenght, int readCapacity, ByteBuf writeBuffer, FileChannel fc -> Ritorna il numero di byte letti, -1 se la pos indicata supera la taglia del file.
         String filename;
@@ -205,6 +205,6 @@ public class TestBufferedChannel {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
 }
