@@ -1,8 +1,6 @@
 package org.apache.bookkeeper.bookie;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class BufferedChannelUtils {
     public static final String EMPTY_EXISTING_FILE_NAME = "EmptyExistingFile.log";
@@ -31,7 +29,6 @@ public class BufferedChannelUtils {
     public static void writeOneByteOnFile(String filename, byte data){
         File file = new File(ROOT_DIR_PATH, PATH_PREFIX + filename);
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            // Write a single byte (value 42) to the file
             fos.write(data);
             System.out.println("Byte written to file.");
         } catch (IOException e) {
@@ -50,9 +47,8 @@ public class BufferedChannelUtils {
     }
 
     public static long readFileSize(String filename){
-
         File file = new File(ROOT_DIR_PATH, PATH_PREFIX + filename);
-        long fileSize = 0;
+        long fileSize=0;
 
         if (file.exists()) {
             fileSize = file.length();
@@ -62,6 +58,24 @@ public class BufferedChannelUtils {
             System.out.println("File does not exist.");
         }
         return fileSize;
+    }
+
+    public static String readFileContent(String filename){
+        File file = new File(ROOT_DIR_PATH, PATH_PREFIX + filename);
+
+        try (FileReader fileReader = new FileReader(file);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println("Line: " + line);
+                return line;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }
