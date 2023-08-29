@@ -28,7 +28,7 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
     FileChannel fc; //{null}, {fc empty existing file}, {fc existing file contenente 1 byte}, {fc !existing file}
     boolean emptyWriteBuffFlag; //{true buffer vuoto}, {false buffer non vuoto} E' stato aggiunto a seguito dell'evoluzione dei test vista la coverage
 
-    @Parameterized.Parameters
+    /*@Parameterized.Parameters
     public static Collection<Object[]> getTestParameters() throws FileNotFoundException {
         return Arrays.asList(new Object[][]{ // dest, pos, readCapacity, fc, filename, expected
 
@@ -69,10 +69,10 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
                 {Unpooled.buffer(1), 0, 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EXISTING_FILE_NAME, new IOException()},
 
         });
-    }
+    }*/
 
 
-    /*@Parameterized.Parameters //E' stato aggiunto il parametro emptyWriteBuffFlag a seguito dell'evoluzione dei test vista la coverage
+    @Parameterized.Parameters //E' stato aggiunto il parametro emptyWriteBuffFlag a seguito dell'evoluzione dei test vista la coverage
     public static Collection<Object[]> getEvolutedTestParameters() throws FileNotFoundException {
         return Arrays.asList(new Object[][]{ // dest, pos, readCapacity, emptyWriteBuffFlag fc, filename, expected
 
@@ -119,10 +119,10 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
                 {Unpooled.buffer(1), 0, 1, false, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EXISTING_FILE_NAME, "a"},
 
         });
-    }*/
+    }
 
 
-    public BufferedChannelReadTest(ByteBuf dest, long pos, int rwCapacity, FileChannel fc, String filename, Object expected){
+    /*public BufferedChannelReadTest(ByteBuf dest, long pos, int rwCapacity, FileChannel fc, String filename, Object expected){
         this.allocator = UnpooledByteBufAllocator.DEFAULT;
         this.dest=dest;
         this.pos=pos;
@@ -130,11 +130,11 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
         this.fc = fc;
         this.filename = filename;
         this.expected = expected;
-    }
+    }*/
 
 
     //Costruttore per la classe di test evoluta, che richiede in più il parametro emptyWriteBuffFlag
-    /*public BufferedChannelReadTest(ByteBuf dest, long pos, int rwCapacity, boolean emptyWriteBuffFlag, FileChannel fc, String filename, Object expected){
+    public BufferedChannelReadTest(ByteBuf dest, long pos, int rwCapacity, boolean emptyWriteBuffFlag, FileChannel fc, String filename, Object expected){
         this.allocator = UnpooledByteBufAllocator.DEFAULT;
         this.dest=dest;
         this.pos=pos;
@@ -143,7 +143,7 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
         this.fc = fc;
         this.filename = filename;
         this.expected = expected;
-    }*/
+    }
 
 
     @Test
@@ -157,7 +157,7 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
             il suo scopo è quello di riempire il buffer di scrittura con un byte, in modo da poter testare la parte
             che si occupa di effettuare lo svuotamento del writeBuff su file prima di fare la read sul file.
             */
-            //if(!emptyWriteBuffFlag) bc.writeBuffer.writeByte((byte)'a');
+            if(!emptyWriteBuffFlag) bc.writeBuffer.writeByte((byte)'a');
             bc.read(dest, pos);
             // Convert the content of ByteBuf to a UTF-8 string and print it
             String utf8Content = dest.toString(CharsetUtil.UTF_8);
