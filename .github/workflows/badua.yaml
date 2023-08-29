@@ -35,9 +35,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn clean verify -P badua-coverage
-      - name: Upload report
+      - name: Upload report bookeeper server
         uses: actions/upload-artifact@v3
         with:
-          name: badua-report
+          name: badua-report-bookkeeper-server
+          path: bookkeeper-server/target/badua.xml
+          if-no-files-found: error
+      - name: Upload report bookkeeper common
+        uses: actions/upload-artifact@v3
+        with:
+          name: badua-report-bookkeeper-common
           path: bookkeeper-common/target/badua.xml
           if-no-files-found: error
