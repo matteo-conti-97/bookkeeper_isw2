@@ -17,4 +17,5 @@ public class BufferedChannelTest {
         BufferedChannelUtils.deleteFile(BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME);
         BufferedChannelUtils.deleteFile(BufferedChannelUtils.NON_EXISTING_FILE_NAME);
     }
+
 }
