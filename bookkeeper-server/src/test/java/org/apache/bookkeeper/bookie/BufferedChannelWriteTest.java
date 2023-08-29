@@ -27,37 +27,37 @@ public class BufferedChannelWriteTest extends BufferedChannelTest{
 
     @Parameterized.Parameters
     public static Collection<Object[]> getTestParameters() throws FileNotFoundException {
-        return Arrays.asList(new Object[][]{ //allocator, srcBuff, writeCapacity, fc, filename, expected
+        return Arrays.asList(new Object[][]{ //srcBuff, writeCapacity, fc, filename, expected
 
-                //0 - allocator, srcBuff null, 1, fc empty existing file -> Error null srcBuff -> NullPointerException
-                {UnpooledByteBufAllocator.DEFAULT, null, 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, new NullPointerException()},
+                //0 - srcBuff null, 1, fc empty existing file -> Error null srcBuff -> NullPointerException
+                {null, 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, new NullPointerException()},
 
-                //1 - allocator, srcBuffDim=0, 1, fc empty existing file -> Error srcBuffDim 0 -> Filesize 0
-                {UnpooledByteBufAllocator.DEFAULT, Unpooled.buffer(0), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, ""},
+                //1 - srcBuffDim=0, 1, fc empty existing file -> Error srcBuffDim 0 -> Filesize 0
+                {Unpooled.buffer(0), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, ""},
 
-                //2 - allocator, srcBuffDim=1 empty, 1, fc empty existing file -> Ok -> File size 0
-                {UnpooledByteBufAllocator.DEFAULT, Unpooled.buffer(1), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, ""},
+                //2 - srcBuffDim=1 empty, 1, fc empty existing file -> Ok -> File size 0
+                {Unpooled.buffer(1), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, ""},
 
-                //3 - allocator, srcBuffDim=1 1Byte data, 1, fc empty existing file -> Ok file size 1
-                {UnpooledByteBufAllocator.DEFAULT, Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "a"},
+                //3 - srcBuffDim=1 1Byte data, 1, fc empty existing file -> Ok file size 1
+                {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "a"},
 
-                //4 - allocator, srcBuffDim=1 1Byte data, 0, fc empty existing file, Error writeCapacity 0 -> File size 0 -> Entra in loop infinito è un bug
-                //{UnpooledByteBufAllocator.DEFAULT, Unpooled.buffer(1).writeByte((byte) 'a'), 0, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, ""},
+                //4 - arcBuffDim=1 1Byte data, 0, fc empty existing file, Error writeCapacity 0 -> File size 0 -> Entra in loop infinito è un bug
+                //{Unpooled.buffer(1).writeByte((byte) 'a'), 0, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, ""},
 
-                //5 - allocator, srcBuffDim=1 1Byte data, 1, null -> Error null fc -> NullPointerException
-                {UnpooledByteBufAllocator.DEFAULT, Unpooled.buffer(1).writeByte((byte) 'a'), 1, null, null, new NullPointerException()},
+                //5 - srcBuffDim=1 1Byte data, 1, null -> Error null fc -> NullPointerException
+                {Unpooled.buffer(1).writeByte((byte) 'a'), 1, null, null, new NullPointerException()},
 
-                //6 - allocator, srcBuffDim=1 1Byte data, 1, fc existing file contenente 1 byte -> Ok -> Filesize = 2
-                {UnpooledByteBufAllocator.DEFAULT, Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "ca"},
+                //6 - srcBuffDim=1 1Byte data, 1, fc existing file contenente 1 byte -> Ok -> Filesize = 2
+                {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "ca"},
 
-                //7 - allocator, srcBuffDim=1 1Byte data, 1, fc !existing file -> Ok -> Filesize = 1
-                {UnpooledByteBufAllocator.DEFAULT, Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "a"},
+                //7 - srcBuffDim=1 1Byte data, 1, fc !existing file -> Ok -> Filesize = 1
+                {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "a"},
 
         });
     }
 
-    public BufferedChannelWriteTest(ByteBufAllocator allocator, ByteBuf src, int writeCapacity, FileChannel fc, String filename, Object expected){
-        this.allocator = allocator;
+    public BufferedChannelWriteTest(ByteBuf src, int writeCapacity, FileChannel fc, String filename, Object expected){
+        this.allocator = UnpooledByteBufAllocator.DEFAULT;
         this.src = src;
         this.writeCapacity = writeCapacity;
         this.fc = fc;
@@ -73,10 +73,7 @@ public class BufferedChannelWriteTest extends BufferedChannelTest{
 
             if(filename.equals(BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME)) fc.position(1);
             bc = new BufferedChannel(allocator, fc, writeCapacity);
-            System.out.println("FC position "+fc.position());
             bc.write(src);
-            System.out.println("Filename: " + filename);
-            long fileSize = BufferedChannelUtils.readFileSize(filename);
             String fileContent = BufferedChannelUtils.readFileContent(filename);
             System.out.println("File content: " + fileContent);
             Assert.assertEquals(expected, fileContent);
