@@ -102,10 +102,10 @@ public class BufferedChannelWriteTest extends BufferedChannelTest{
                 {Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "cab"},
                 // EVO 3 -> Casi di test aggiunti a seguito dell'evoluzione 3 dei test, vengono dati in input src contenenti 2byte e messa la write capacity a srcDataSize+1=3
                 //11 - srcBuffDim=2 2Byte data, 2, fc empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "ab"
-                //{Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 3, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "ab"},
+                {Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 3, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "ab"},
 
-                //11 - srcBuffDim=2 2Byte data, 2, fc !empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "cab"
-                //{Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 3, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "cab"},
+                //12 - srcBuffDim=2 2Byte data, 2, fc !empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "cab"
+                {Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 3, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "cab"},
 
         });
     }
