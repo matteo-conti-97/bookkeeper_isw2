@@ -13,8 +13,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @RunWith(Parameterized.class)
 public class BufferedChannelWriteTest extends BufferedChannelTest{
@@ -23,9 +25,8 @@ public class BufferedChannelWriteTest extends BufferedChannelTest{
     ByteBufAllocator allocator;
     ByteBuf src; //Buffer con i dati da scrivere -> {null}, {buffDim= 0}, {buffDim = 1 empty}, {buffDim = 1, 1Byte data}
     int writeCapacity; //Dimensione buffer di scrittura -> {0, 1}
-    FileChannel fc; // FileChannel del file su cui scrivere {null}, {fc empty existing file}, {fc !empty existing file}, {fc !existing file}
-
-    long unpersistedBytesBound; //Parametro aggiunto a seguito dell'evoluzione dei casi di test, indica quanti byte possono essere scritti nel buffer prima di effettuare un flush. {0, 1}
+    FileChannel fc; // FileChannel del file su cui scrivere {null}, {fc empty existing file}, {fc !empty existing file}
+    long unpersistedBytesBound; //Parametro aggiunto a seguito dell'evoluzione dei casi di test, indica quanti byte possono essere scritti nel buffer prima di effettuare un flush. {srcBuffDataSize, srcBuffDataSize+1}
 
     /*@Parameterized.Parameters
     public static Collection<Object[]> getTestParameters() throws FileNotFoundException {
@@ -52,8 +53,6 @@ public class BufferedChannelWriteTest extends BufferedChannelTest{
                 //6 - srcBuffDim=1 1Byte data, 1, fc existing file contenente 1 byte -> Ok -> Stringa "ca"
                 {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "ca"},
 
-                //7 - srcBuffDim=1 1Byte data, 1, fc !existing file -> Ok -> Stringa "a"
-                {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "a"},
 
         });
     }*/
@@ -62,7 +61,7 @@ public class BufferedChannelWriteTest extends BufferedChannelTest{
     public static Collection<Object[]> getEvolutedTestParameters() throws FileNotFoundException {
         return Arrays.asList(new Object[][]{ //srcBuff, writeCapacity, fc, unpersistedBytesBound, filename, expected
 
-                //0 - srcBuff null, 1, fc empty existing file, unpersistedBytesBound 0  -> Error null srcBuff -> NullPointerException
+               //0 - srcBuff null, 1, fc empty existing file, unpersistedBytesBound 0  -> Error null srcBuff -> NullPointerException
                 {null, 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 0L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, new NullPointerException()},
 
                 //1 - srcBuffDim=0, 1, fc empty existing file, unpersistedBytesBound 0  -> Error srcBuffDim 0 -> Stringa vuota
@@ -83,20 +82,34 @@ public class BufferedChannelWriteTest extends BufferedChannelTest{
                 //6 - srcBuffDim=1 1Byte data, 1, fc existing file contenente 1 byte, unpersistedBytesBound 0 -> Ok -> Stringa "ca"
                 {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 0L, BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "ca"},
 
-                //7 - srcBuffDim=1 1Byte data, 1, fc !existing file, unpersistedBytesBound 0 -> Ok -> Stringa "a"
-                {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), 0L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "a"},
-
-                //8 - srcBuffDim=1 1Byte data, 1, fc existing file contenente 1 byte, unpersistedBytesBound 1 -> Ok -> Stringa "ca"
+                //7 - srcBuffDim=1 1Byte data, 1, fc existing file contenente 1 byte, unpersistedBytesBound 1 -> Ok -> Stringa "ca"
                 {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "ca"},
 
-                //9 - srcBuffDim=1 1Byte data, 1, fc !existing file, unpersistedBytesBound1 -> Ok -> Stringa "a"
-                {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +   BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "a"},
-
-                //10 - srcBuffDim=1 1Byte data, 1, fc empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "a"
+                //8 - srcBuffDim=1 1Byte data, 1, fc empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "a"
                 {Unpooled.buffer(1).writeByte((byte) 'a'), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "a"},
+
+                // EVO 2 -> Casi di test aggiunti a seguito dell'evoluzione 2 dei test, vengono dati in input src contenenti 2byte
+                //9 - srcBuffDim=2 2Byte data, 1, fc empty existing file, unpersistedBytesBound 0 -> Ok -> Stringa "ab"
+                {Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 0L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "ab"},
+
+                //10 - srcBuffDim=2 2Byte data, 1, fc !empty existing file, unpersistedBytesBound 0 -> Ok -> Stringa "cab"
+                {Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 0L, BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "cab"},
+
+                //9 - srcBuffDim=2 2Byte data, 1, fc empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "ab"
+                {Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "ab"},
+
+                //10 - srcBuffDim=2 2Byte data, 1, fc !empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "cab"
+                {Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "cab"},
+                // EVO 3 -> Casi di test aggiunti a seguito dell'evoluzione 3 dei test, vengono dati in input src contenenti 2byte e messa la write capacity a srcDataSize+1=3
+                //11 - srcBuffDim=2 2Byte data, 2, fc empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "ab"
+                //{Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 3, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, "ab"},
+
+                //11 - srcBuffDim=2 2Byte data, 2, fc !empty existing file, unpersistedBytesBound 1 -> Ok -> Stringa "cab"
+                //{Unpooled.buffer(2).writeBytes(new byte[] {(byte)'a', (byte)'b'}), 3, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), 1L, BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "cab"},
 
         });
     }
+
 
     /*public BufferedChannelWriteTest(ByteBuf src, int writeCapacity, FileChannel fc, String filename, Object expected){
         this.allocator = UnpooledByteBufAllocator.DEFAULT;

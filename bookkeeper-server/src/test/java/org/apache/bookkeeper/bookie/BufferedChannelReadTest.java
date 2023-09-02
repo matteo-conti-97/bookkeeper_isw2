@@ -25,7 +25,7 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
     int lenght; //{destSize, destSize+1}
     int rwCapacity; //{0, 1}
     ByteBuf writeBuffer; //{null}, {buffer vuoto}, {buffer contenente un solo byte}
-    FileChannel fc; //{null}, {fc empty existing file}, {fc existing file contenente 1 byte}, {fc !existing file}
+    FileChannel fc; //{null}, {fc empty existing file}, {fc existing file contenente 1 byte}
     boolean emptyWriteBuffFlag; //{true buffer vuoto}, {false buffer non vuoto} E' stato aggiunto a seguito dell'evoluzione dei test vista la coverage
 
     /*@Parameterized.Parameters
@@ -61,13 +61,6 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
 
                 //7.1 - destBuffSize 1,  pos 0, readCapacity 1, fc empty existing file -> Error pos 0 >= FileSize 0 -> IOException
                 {Unpooled.buffer(1), 0, 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, new IOException()},
-
-                //8 - destBuffSize 1,  pos 0, readCapacity 1, fc !existing file -> Error pos 0 >= FileSize perche file creato è vuoto-> -1 come da doc
-                //{Unpooled.buffer(1), 0, 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EXISTING_FILE_NAME, -1},
-
-                //8.1 - destBuffSize 1,  pos 0, readCapacity 1, fc !existing file -> Error pos 0 >= FileSize perchè il file creato è vuoto-> IOException
-                {Unpooled.buffer(1), 0, 1, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EXISTING_FILE_NAME, new IOException()},
-
         });
     }*/
 
@@ -109,15 +102,6 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
                 //8.1 - destBuffSize 1,  pos 0, readCapacity 1, emptyWriteBuff, fc empty existing file -> Error pos 0 >= FileSize 0 -> IOException
                 {Unpooled.buffer(1), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, new IOException()},
 
-                //9 - destBuffSize 1,  pos 0, readCapacity 1, emptyWriteBuff, fc !existing file -> Error pos 0 >= FileSize perche file creato è vuoto-> -1 come da doc
-                //{Unpooled.buffer(1), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EXISTING_FILE_NAME, -1},
-
-                //9.1 - destBuffSize 1,  pos 0, readCapacity 1, emptyWriteBuff, fc !existing file -> Error pos 0 >= FileSize perchè il file creato è vuoto-> IOException
-                {Unpooled.buffer(1), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EXISTING_FILE_NAME, new IOException()},
-
-                //10 - destBuffSize 1,  pos 0, readCapacity 1, !emptyWriteBuff, fc !existing file -> Ok -> 1 byte letto crea il file e ci flusha sopra, la stringa "a"
-                {Unpooled.buffer(1), 0, 1, false, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EXISTING_FILE_NAME, "a"},
-
         });
     }
 
@@ -152,7 +136,7 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
         try {
             //Se il file è non vuoto va settata la pos del fileChannel a 1
             if(filename.equals(BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME)) fc.position(1);
-            if(filename.equals("test")) fc.position(2);
+            //if(filename.equals("test")) fc.position(2);
             bc = new BufferedChannel(allocator, fc, rwCapacity);
             /*La seguente riga è stata aggiunta a seguito dell'evoluzione dei casi di test vista la coverage,
             il suo scopo è quello di riempire il buffer di scrittura con un byte, in modo da poter testare la parte

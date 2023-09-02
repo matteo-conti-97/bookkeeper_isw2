@@ -2,6 +2,7 @@ package org.apache.bookkeeper.bookie;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 public class BufferedChannelTest {
@@ -13,10 +14,9 @@ public class BufferedChannelTest {
     }
 
     @AfterClass
-    public static void clearEnv(){
+    public static void clearEnv() {
         BufferedChannelUtils.deleteFile(BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME);
         BufferedChannelUtils.deleteFile(BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME);
-        BufferedChannelUtils.deleteFile(BufferedChannelUtils.NON_EXISTING_FILE_NAME);
     }
 
 }
