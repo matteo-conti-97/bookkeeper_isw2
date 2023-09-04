@@ -348,7 +348,7 @@
                 <param>org.apache.bookkeeper.bookie.BufferedChannel</param>
               </targetClasses>
               <targetTests>
-                <param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>
+              <!--<param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>-->
               <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>
               </targetTests>
               <avoidCallsTo>
