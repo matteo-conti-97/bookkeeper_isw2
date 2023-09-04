@@ -28,7 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.pitest:pitest-maven:mutationCoverage surefire:test -P pit-coverage
+        run: mvn -B clean verify org.pitest:pitest-maven:mutationCoverage surefire:test -P pit-coverage
       - name: Upload report
         uses: actions/upload-artifact@v3
         with:
