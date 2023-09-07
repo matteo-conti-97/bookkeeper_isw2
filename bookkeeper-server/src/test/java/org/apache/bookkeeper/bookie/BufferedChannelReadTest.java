@@ -70,28 +70,28 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
         return Arrays.asList(new Object[][]{ // dest, pos, readCapacity, emptyWriteBuffFlag fc, filename, expected
 
                 //0 - dest null, pos 0, readCapacity 1, emptyWriteBuff, fc !empty existing file -> Error null destBuff -> NullPointerException
-                {null, 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, new NullPointerException()},
+                {null, 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_FILE_NAME, new NullPointerException()},
 
                 //1 - destBuffSize 0,  pos 0, readCapacity 1, emptyWriteBuff, fc !empty existing file -> Error destBuffSize 0 -> 0 byte letti, la stringa vuota
-                {Unpooled.buffer(0), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, ""},
+                {Unpooled.buffer(0), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_FILE_NAME, ""},
 
                 //2 - destBuffSize 1,  pos -1, readCapacity 1, emptyWriteBuff, fc !empty existing file -> Error pos -1 -> IllegalArgumentException
-                {Unpooled.buffer(1), -1, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, new IllegalArgumentException()},
+                {Unpooled.buffer(1), -1, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_FILE_NAME, new IllegalArgumentException()},
 
                 //3 - destBuffSize 1,  pos 0, readCapacity 1, emptyWriteBuff, fc !empty existing file -> Ok -> 1 byte letto, la stringa "c"
-                {Unpooled.buffer(1), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "c"},
+                {Unpooled.buffer(1), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_FILE_NAME, "c"},
 
                 //4 - destBuffSize 1,  pos 0, readCapacity 1, emptyWriteBuff, null fc -> Error null fc -> NullPointerException
                 {Unpooled.buffer(1), 0, 1, true, null, null, new NullPointerException()},
 
                 //5 - destBuffSize 1,  pos 1, readCapacity 1, !emptyWriteBuff, fc !empty existing file -> Ok -> 1 byte letto, la stringa "a"
-                {Unpooled.buffer(1), 1, 1, false, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, "a"},
+                {Unpooled.buffer(1), 1, 1, false, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_FILE_NAME, "a"},
 
                 //6 - destBuffSize 1,  pos 1, readCapacity 1, emptyWriteBuff, fc !empty existing file -> Error pos 1 >= FileSize -> -1 come da doc
                 //{Unpooled.buffer(1), 1, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, -1},
 
                 //6.1 - destBuffSize 1,  pos 1, readCapacity 1, emptyWriteBuff, fc !empty existing file -> Error pos 1 >= FileSize -> IOException
-                {Unpooled.buffer(1), 1, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, new IOException()},
+                {Unpooled.buffer(1), 1, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_FILE_NAME, new IOException()},
 
                 //7 - destBuffSize 1,  pos 0, readCapacity 0, emptyWriteBuff, fc !empty existing file -> Error readCapacity 0 -> IllegalArgumentException -> Bug entra in loop
                 //{Unpooled.buffer(1), 0, 0, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME, new IllegalArgumentException()},
@@ -100,7 +100,7 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
                 //{Unpooled.buffer(1), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, -1},
 
                 //8.1 - destBuffSize 1,  pos 0, readCapacity 1, emptyWriteBuff, fc empty existing file -> Error pos 0 >= FileSize 0 -> IOException
-                {Unpooled.buffer(1), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_EXISTING_FILE_NAME, new IOException()},
+                {Unpooled.buffer(1), 0, 1, true, new RandomAccessFile(new File(BufferedChannelUtils.ROOT_DIR_PATH, BufferedChannelUtils.PATH_PREFIX +  BufferedChannelUtils.EMPTY_FILE_NAME), "rw").getChannel(), BufferedChannelUtils.EMPTY_FILE_NAME, new IOException()},
 
         });
     }
@@ -135,7 +135,7 @@ public class BufferedChannelReadTest extends BufferedChannelTest{
         BufferedChannel bc;
         try {
             //Se il file è non vuoto va settata la pos del fileChannel a 1
-            if(filename.equals(BufferedChannelUtils.NON_EMPTY_EXISTING_FILE_NAME)) fc.position(1);
+            if(filename.equals(BufferedChannelUtils.NON_EMPTY_FILE_NAME)) fc.position(1);
             //if(filename.equals("test")) fc.position(2);
             bc = new BufferedChannel(allocator, fc, rwCapacity);
             /*La seguente riga è stata aggiunta a seguito dell'evoluzione dei casi di test vista la coverage,

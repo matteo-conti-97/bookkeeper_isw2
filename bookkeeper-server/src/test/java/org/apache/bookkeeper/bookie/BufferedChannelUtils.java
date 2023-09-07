@@ -3,8 +3,8 @@ package org.apache.bookkeeper.bookie;
 import java.io.*;
 
 public class BufferedChannelUtils {
-    public static final String EMPTY_EXISTING_FILE_NAME = "EmptyExistingFile.log";
-    public static final String NON_EMPTY_EXISTING_FILE_NAME = "NonEmptyExistingFile.log";
+    public static final String EMPTY_FILE_NAME = "EmptyFile.log";
+    public static final String NON_EMPTY_FILE_NAME = "NonEmptyFile.log";
     public static final String ROOT_DIR_PATH = System.getProperty("user.dir");
 
     public static final String PATH_PREFIX = "src/test/resources/";

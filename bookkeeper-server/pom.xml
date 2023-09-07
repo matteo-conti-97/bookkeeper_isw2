@@ -31,8 +31,12 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.4.0</version>
-      <scope>test</scope>
+      <version>3.12.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>3.12.4</version>
     </dependency>
     <dependency>
       <groupId>org.apache.bookkeeper</groupId>
@@ -346,10 +350,12 @@
             <configuration>
               <targetClasses>
                 <param>org.apache.bookkeeper.bookie.BufferedChannel</param>
+                <param>org.apache.bookkeeper.bookie.Journal</param>
               </targetClasses>
               <targetTests>
               <!--<param>org.apache.bookkeeper.bookie.BufferedChannelReadTest</param>-->
               <param>org.apache.bookkeeper.bookie.BufferedChannelWriteTest</param>
+                <param>org.apache.bookkeeper.bookie.JournalTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>
