@@ -4,7 +4,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import io.netty.buffer.UnpooledByteBufAllocator;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,7 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class BufferedChannelWriteTest extends BufferedChannelTest{
+public class BufferedChannelWriteTest{
     String filename;
     Object expected;
     ByteBufAllocator allocator;
@@ -25,6 +27,19 @@ public class BufferedChannelWriteTest extends BufferedChannelTest{
     int writeCapacity; //Dimensione buffer di scrittura -> {0, 1}
     FileChannel fc; // FileChannel del file su cui scrivere {null}, {fc empty  file}, {fc !empty  file}
     long unpersistedBytesBound; //Parametro aggiunto a seguito dell'evoluzione dei casi di test, indica quanti byte possono essere scritti nel buffer prima di effettuare un flush. {srcBuffDataSize, srcBuffDataSize+1}
+
+    @BeforeClass
+    public static void setupEnv() {
+        BufferedChannelUtils.createFile(BufferedChannelUtils.EMPTY_FILE_NAME);
+        BufferedChannelUtils.createFile(BufferedChannelUtils.NON_EMPTY_FILE_NAME);
+        BufferedChannelUtils.writeOneByteOnFile(BufferedChannelUtils.NON_EMPTY_FILE_NAME, (byte) 'c');
+    }
+
+    @AfterClass
+    public static void clearEnv() {
+        BufferedChannelUtils.deleteFile(BufferedChannelUtils.EMPTY_FILE_NAME);
+        BufferedChannelUtils.deleteFile(BufferedChannelUtils.NON_EMPTY_FILE_NAME);
+    }
 
     /*@Parameterized.Parameters
     public static Collection<Object[]> getTestParameters() throws FileNotFoundException {
