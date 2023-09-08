@@ -82,7 +82,7 @@ public class DefaultEnsemblePlacementPolicyTest {
             esp = new DefaultEnsemblePlacementPolicy();
             esp.onClusterChanged(createDummyHashSet(7), createDummyHashSet(7));
             ensembleBookies = esp.newEnsemble(ensembleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookies);
-            System.out.println("Created " + ensembleBookies.getResult().size() +" bookies");
+            System.out.println("Created " + ensembleBookies.getResult().size() +" bookies.");
             Assert.assertEquals(expected, ensembleBookies.getResult().size());
         } catch (Exception e) {
             e.printStackTrace();
