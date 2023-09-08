@@ -36,6 +36,7 @@ public class DefaultEnsemblePlacementPolicyTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> getTestParameters() {
+        Set<BookieId> excludeBookies = createDummyHashSet(1);
         return Arrays.asList(new Object[][]{ // ensebmleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookie, expected
                 //0 - ensembleSize -1, writeQuorumSize -1, ackQuorumSize -1, no metadata, empty set-> IllegalArgumentException for the -1
                 {-1, -1, -1, new HashMap<>(), new HashSet<>(), new IllegalArgumentException()},
@@ -46,7 +47,7 @@ public class DefaultEnsemblePlacementPolicyTest {
                 //3 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 1, no metadata, null set -> NullPointerException
                 {1, 1, 1, new HashMap<>(), null, new NullPointerException()},
                 //4 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 1, no metadata, set con un bookie -> Ensemble with 1 bookie
-                {1, 1, 1, new HashMap<>(), createDummyHashSet(1), 1},
+                {1, 1, 1, new HashMap<>(), excludeBookies, 1},
                 //5 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 2, no metadata, empty set -> Illegal argument exception ackQuorumSize > writeQuorumSize -> Bug lui crea tranquillamente l'insieme con 1 bookie
                 //{1, 1, 2, new HashMap<>(), new HashSet<>(), new IllegalArgumentException()},
                 //6 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 2, no metadata, empty set -> Illegal argument exception writeQuorumSize > ensembleSize -> Bug lui crea tranquillamente l'insieme con 1 bookie
