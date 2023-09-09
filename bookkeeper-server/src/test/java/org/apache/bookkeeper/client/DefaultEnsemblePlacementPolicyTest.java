@@ -133,7 +133,9 @@ public class DefaultEnsemblePlacementPolicyTest {
 
             //EVO 1 set isWeighted attribute with reflection
             isWeightedAttribute.set(esp, isWeighted);
-            weightedBookiesAttribute.set(esp, Mockito.mock(WeightedRandomSelectionImpl.class)); //Necessario per non avere nullpointerexception
+            WeightedRandomSelectionImpl<BookieId> mockedWeightedRandomSelection = Mockito.mock(WeightedRandomSelectionImpl.class);
+            Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(BookieId.parse("mockedBookie"));
+            weightedBookiesAttribute.set(esp, mockedWeightedRandomSelection); //Necessario per non avere nullpointerexception
             //set knownBookies attribute with reflection
             knownBookiesAttribute.set(esp, DefaultEnsemblePlacementPolicyUtils.createDummyHashSet(7));
 
