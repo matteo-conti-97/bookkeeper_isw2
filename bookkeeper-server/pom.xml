@@ -30,19 +30,20 @@
     <!-- MOCKITO -->
     <dependency>
       <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>3.12.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <version>2.25.1</version>
+      <artifactId>mockito-all</artifactId>
+      <version>2.0.2-beta</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-inline</artifactId>
-      <version>3.12.4</version>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>1.8.16</version>
+    </dependency>
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy-agent</artifactId>
+      <version>1.8.16</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.bookkeeper</groupId>
@@ -481,19 +482,20 @@
         <!-- MOCKITO -->
         <dependency>
           <groupId>org.mockito</groupId>
-          <artifactId>mockito-junit-jupiter</artifactId>
-          <version>2.25.1</version>
+          <artifactId>mockito-all</artifactId>
+          <version>2.0.2-beta</version>
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.mockito</groupId>
-          <artifactId>mockito-core</artifactId>
-          <version>3.12.4</version>
+          <groupId>net.bytebuddy</groupId>
+          <artifactId>byte-buddy</artifactId>
+          <version>1.8.16</version>
         </dependency>
         <dependency>
-          <groupId>org.mockito</groupId>
-          <artifactId>mockito-inline</artifactId>
-          <version>3.12.4</version>
+          <groupId>net.bytebuddy</groupId>
+          <artifactId>byte-buddy-agent</artifactId>
+          <version>1.8.16</version>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>br.usp.each.saeg</groupId>
