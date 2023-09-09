@@ -61,7 +61,7 @@ public class DefaultEnsemblePlacementPolicyTest {
     @Parameterized.Parameters
     public static Collection<Object[]> getTestParameters() {
         return Arrays.asList(new Object[][]{ // ensebmleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookieSetType, expected
-                /*//0 - ensembleSize -1, writeQuorumSize -1, ackQuorumSize -1, no metadata, empty set, isWeighted -> IllegalArgumentException for the -1
+                //0 - ensembleSize -1, writeQuorumSize -1, ackQuorumSize -1, no metadata, empty set, isWeighted -> IllegalArgumentException for the -1
                 {-1, -1, -1, new HashMap<>(), new HashSet<>(), false, new IllegalArgumentException()},
                 //1 - ensembleSize 0, writeQuorumSize 0, ackQuorumSize 0, no metadata, empty set, false -> Valid ensembleSize/writeQuorumSize/ackQuorumSize but 0 -> Ensemble with no bookies
                 {0, 0, 0, new HashMap<>(), new HashSet<>(), false, 0},
@@ -82,7 +82,7 @@ public class DefaultEnsemblePlacementPolicyTest {
                 //9 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 0, null metadata, empty set, false -> Ensemble with 1 bookie -> no use metadata
                 {1, 1, 1, null, new HashSet<>(), false, 1},
                 //10 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 0, null metadata, empty set, false -> Ensemble with 1 bookie -> use metadata
-                {1, 1, 1, ImmutableMap.of("testBookie", "TestMetadata".getBytes(StandardCharsets.UTF_8)), new HashSet<>(), false, 1},*/
+                {1, 1, 1, ImmutableMap.of("testBookie", "TestMetadata".getBytes(StandardCharsets.UTF_8)), new HashSet<>(), false, 1},
 
                 //EVO 1
                 //11 - ensembleSize -1, writeQuorumSize -1, ackQuorumSize -1, no metadata, empty set true -> IllegalArgumentException for the -1
