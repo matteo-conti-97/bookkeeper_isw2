@@ -23,6 +23,7 @@ public class DefaultEnsemblePlacementPolicyTest {
     int ackQuorumSize; // {writeQuorumSize+1, writeQuorumSize}
     Map<String, byte[]> customMetadata; // {null, empty map, map with one element}
     Set<BookieId> excludeBookies; // {null, empty set, set with one element}
+    String excludeBookiesType;
     Object expected;
 
 
@@ -59,11 +60,7 @@ public class DefaultEnsemblePlacementPolicyTest {
         this.writeQuorumSize = writeQuorumSize;
         this.ackQuorumSize = ackQuorumSize;
         this.customMetadata = customMetadata;
-        if(Objects.equals(excludeBookiesType, DefaultEnsemblePlacementPolicyUtils.EMPTY_SET))
-            this.excludeBookies = new HashSet<>();
-        else if(Objects.equals(excludeBookiesType, DefaultEnsemblePlacementPolicyUtils.NULL_SET))
-            this.excludeBookies = null;
-        else this.excludeBookies = DefaultEnsemblePlacementPolicyUtils.createDummyHashSet(1);
+        this.excludeBookiesType = excludeBookiesType;
         this.expected = expected;
     }
 
@@ -73,6 +70,11 @@ public class DefaultEnsemblePlacementPolicyTest {
     }*/
     @Test
     public void newEnsembleTest(){
+        if(Objects.equals(excludeBookiesType, DefaultEnsemblePlacementPolicyUtils.EMPTY_SET))
+            this.excludeBookies = new HashSet<>();
+        else if(Objects.equals(excludeBookiesType, DefaultEnsemblePlacementPolicyUtils.NULL_SET))
+            this.excludeBookies = null;
+        else this.excludeBookies = DefaultEnsemblePlacementPolicyUtils.createDummyHashSet(1);
         EnsemblePlacementPolicy esp;
         EnsemblePlacementPolicy.PlacementResult<List<BookieId>> ensembleBookies;
         try {
