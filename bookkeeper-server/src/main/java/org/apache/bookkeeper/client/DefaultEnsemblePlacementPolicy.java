@@ -86,14 +86,14 @@ public class DefaultEnsemblePlacementPolicy implements EnsemblePlacementPolicy {
                 if (CollectionUtils.subtract(allBookies, excludeBookies).size() < ensembleSize) {
                     throw new BKNotEnoughBookiesException();
                 }
-                while (ensembleSize > 0) {
+                while (ensembleSize > 0) { //Non raggiungibile il caso <=0 perchè quando è decrementa a 0 esce a riga 97 e quando viene passato 0 esce a riga 70
                     BookieId b = weightedSelection.getNextRandom();
                     if (newBookies.contains(b) || excludeBookies.contains(b)) {
                         continue;
                     }
                     newBookies.add(b);
                     --ensembleSize;
-                    if (ensembleSize == 0) {
+                    if (ensembleSize == 0) { //Non capita mai che non entro perche come boundary value è 1 quindi se ci passo decremento e arrivo a 0
                         return PlacementResult.of(newBookies,
                                 isEnsembleAdheringToPlacementPolicy(newBookies, quorumSize, ackQuorumSize));
                     }
@@ -109,7 +109,7 @@ public class DefaultEnsemblePlacementPolicy implements EnsemblePlacementPolicy {
                 }
                 newBookies.add(bookie);
                 --ensembleSize;
-                if (ensembleSize == 0) {
+                if (ensembleSize == 0) {  //Non capita mai che non entro perche come boundary value è 1 quindi se ci passo decremento e arrivo a 0
                     return PlacementResult.of(newBookies,
                             isEnsembleAdheringToPlacementPolicy(newBookies, quorumSize, ackQuorumSize));
                 }
