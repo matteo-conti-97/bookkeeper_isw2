@@ -1,14 +1,13 @@
 package org.apache.bookkeeper.client;
 
 import org.apache.bookkeeper.net.BookieId;
-import org.mockito.Mockito;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class DefaultEnsemblePlacementPolicyUtils {
 
-    public enum wrsbType{
+    public enum WrsbType {
         NULL,
         EMPTY,
         IN_EXCLUDE,
