@@ -11,7 +11,8 @@ public class DefaultEnsemblePlacementPolicyUtils {
         NULL,
         EMPTY,
         IN_EXCLUDE,
-        NOT_IN_EXCLUDE
+        NOT_IN_EXCLUDE,
+        TWO_NOT_IN_EXCLUDE,
     }
     public static Set<BookieId> createDummyHashSet(int size, boolean isKnown){
         Set<BookieId> dummySet = new HashSet<>();

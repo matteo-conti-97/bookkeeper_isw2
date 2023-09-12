@@ -202,32 +202,37 @@ public class DefaultEnsemblePlacementPolicyTest {
                 {1, 1, 1, new HashMap<>(), true, createDummyHashSet(1, false), createDummyHashSet(1, true), WrsbType.NOT_IN_EXCLUDE, 1},
 
                 //EVO2
-                //13 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, false, empty set, empty set, empty map) -> BKNotEnoughBookiesException
+                //13 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 1, no metadata, true, set con un solo bookie non in knownBookies, set con un solo bookie, set con un solo bookie not in excludeBookies -> BKNotEnoughBookiesException
+                {1, 1, 1, new HashMap<>(), true, createDummyHashSet(1, true), createDummyHashSet(1, true), WrsbType.NOT_IN_EXCLUDE, new BKNotEnoughBookiesException()},
+                //14 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, false, empty set, empty set, empty map) -> BKNotEnoughBookiesException
                 {1, 1, 1, new HashMap<>(), false, new HashSet<>(), new HashSet<>(), WrsbType.EMPTY, new BKNotEnoughBookiesException()},
-                //14 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, false, empty set, empty set, empty map) -> Ensemble with no bookies
+                //15 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, false, empty set, empty set, empty map) -> Ensemble with no bookies
                 {0, 0, 0, new HashMap<>(), false, new HashSet<>(), new HashSet<>(), WrsbType.EMPTY, 0},
-                //15 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, false, set con un solo bookie in known bookie, set con un solo bookie, empty map) -> BKNotEnoughBookiesException
+                //16 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, false, set con un solo bookie in known bookie, set con un solo bookie, empty map) -> BKNotEnoughBookiesException
                 {1, 1, 1, new HashMap<>(), false, createDummyHashSet(1, true), createDummyHashSet(1, true), WrsbType.EMPTY, new BKNotEnoughBookiesException()},
-                //16 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, false, set con un solo bookie in known bookie, set con un solo bookie, empty map) -> Ensemble with no bookies
+                //17 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, false, set con un solo bookie in known bookie, set con un solo bookie, empty map) -> Ensemble with no bookies
                 {0, 0, 0, new HashMap<>(), false, createDummyHashSet(1, true), createDummyHashSet(1, true), WrsbType.EMPTY, 0},
-                //17 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, false, empty set, null, empty map) -> NullPointerException
+                //18 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, false, empty set, null, empty map) -> NullPointerException
                 {1, 1, 1, new HashMap<>(), false, new HashSet<>(), null, WrsbType.EMPTY, new NullPointerException()},
-                //18 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, false, empty set, null, empty map) -> Ensemble with no bookies
+                //19 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, false, empty set, null, empty map) -> Ensemble with no bookies
                 {0, 0, 0, new HashMap<>(), false, new HashSet<>(), null, WrsbType.EMPTY, 0},
-                //19 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, false, set con un solo bookie in known bookie, set con due bookie, empty map -> Ensemble with 1 bookie
+                //20 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, false, set con un solo bookie in known bookie, set con due bookie, empty map -> Ensemble with 1 bookie
                 {1, 1, 1, new HashMap<>(), false, createDummyHashSet(1, true), createDummyHashSet(2, true), WrsbType.EMPTY, 1},
-                //20 - ensembleSize 2, writeQuorumSize 2, ackQuorum 2, no metadata, false, empty set, set con due bookie, empty map) -> Ensemble con 2 bookie
+                //21 - ensembleSize 2, writeQuorumSize 2, ackQuorum 2, no metadata, false, empty set, set con due bookie, empty map) -> Ensemble con 2 bookie
                 {2, 2, 2, new HashMap<>(), false, new HashSet<>(), createDummyHashSet(2, true), WrsbType.EMPTY, 2},
-                //21 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, true, empty set, set con un solo bookie, empty map) -> NKNotEnoughBookiesException -> BUG ENSEMBLE CON 1 BOOKIE NULL
+                //22 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, true, empty set, set con un solo bookie, empty map) -> NKNotEnoughBookiesException -> BUG ENSEMBLE CON 1 BOOKIE NULL
                 //{1, 1, 1, new HashMap<>(), true, new HashSet<>(), createDummyHashSet(1, true), WrsbType.EMPTY, new BKNotEnoughBookiesException()},
-                //22 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, true, set con un bookie not in known bookie, set con un solo bookie, map con un bookie in excludeBookie) -> NKNotEnoughBookiesException -> BUG VA IN LOOP
+                //23 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, true, set con un bookie not in known bookie, set con un solo bookie, map con un bookie in excludeBookie) -> NKNotEnoughBookiesException -> BUG VA IN LOOP
                 //{1, 1, 1, new HashMap<>(), true, createDummyHashSet(1, false), createDummyHashSet(1, true), WrsbType.IN_EXCLUDE, new BKNotEnoughBookiesException()},
-                //23 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, true, set con un bookie not in known bookie, set con un solo bookie, null) -> NullPointerException
+                //24 - ensembleSize 1, writeQuorumSize 1, ackQuorum 1, no metadata, true, set con un bookie not in known bookie, set con un solo bookie, null) -> NullPointerException
                 {1, 1, 1, new HashMap<>(), true, createDummyHashSet(1, false), createDummyHashSet(1, true), WrsbType.NULL, new NullPointerException()},
-                //24 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, true, empty set, set con un solo bookie, empty map) -> Ensemble with 0 bookie
+                //25 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, true, empty set, set con un solo bookie, empty map) -> Ensemble with 0 bookie
                 {0, 0, 0, new HashMap<>(), true, new HashSet<>(), createDummyHashSet(1, true), WrsbType.EMPTY, 0},
-                //25 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, true, set con un bookie not in known bookie, set con un solo bookie, map con un bookie in excludeBookie) -> Ensemble with 0 bookie
+                //27 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, true, set con un bookie not in known bookie, set con un solo bookie, map con un bookie in excludeBookie) -> Ensemble with 0 bookie
                 {0, 0, 0, new HashMap<>(), true, createDummyHashSet(1, false), createDummyHashSet(1, true), WrsbType.IN_EXCLUDE, 0},
+                //28 - ensembleSize 2, writeQuorumSize 2, ackQuorum 2, empty map, true, empty set, set con un solo bookie, map con un solo bookie not in excludeBookies) -> Ensemble con 2 bookie
+                {2, 2, 2, new HashMap<>(), true, new HashSet<>(), createDummyHashSet(2, true), WrsbType.TWO_NOT_IN_EXCLUDE, 2},
+
         });
     }
 
@@ -274,6 +279,8 @@ public class DefaultEnsemblePlacementPolicyTest {
                     Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(null);
                 else if(wrsbType==WrsbType.NOT_IN_EXCLUDE)
                     Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(BookieId.parse("mockedBookie"));
+                else if(wrsbType==WrsbType.TWO_NOT_IN_EXCLUDE)
+                    Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(BookieId.parse("mockedBookie0"), BookieId.parse("mockedBookie1"));
                 else if(wrsbType==WrsbType.IN_EXCLUDE)
                     Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(excludeBookies.iterator().next());
                 }
