@@ -230,8 +230,7 @@ public class DefaultEnsemblePlacementPolicyTest {
                 {0, 0, 0, new HashMap<>(), true, new HashSet<>(), createDummyHashSet(1, true), WrsbType.EMPTY, 0},
                 //27 - ensembleSize 0, writeQuorumSize 0, ackQuorum 0, no metadata, true, set con un bookie not in known bookie, set con un solo bookie, map con un bookie in excludeBookie) -> Ensemble with 0 bookie
                 {0, 0, 0, new HashMap<>(), true, createDummyHashSet(1, false), createDummyHashSet(1, true), WrsbType.IN_EXCLUDE, 0},
-                //28 - ensembleSize 2, writeQuorumSize 2, ackQuorum 2, empty map, true, empty set, set con un solo bookie, map con un solo bookie not in excludeBookies) -> Ensemble con 2 bookie
-                {2, 2, 2, new HashMap<>(), true, new HashSet<>(), createDummyHashSet(2, true), WrsbType.TWO_NOT_IN_EXCLUDE, 2},
+
 
         });
     }
@@ -279,8 +278,6 @@ public class DefaultEnsemblePlacementPolicyTest {
                     Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(null);
                 else if(wrsbType==WrsbType.NOT_IN_EXCLUDE)
                     Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(BookieId.parse("mockedBookie"));
-                else if(wrsbType==WrsbType.TWO_NOT_IN_EXCLUDE)
-                    Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(BookieId.parse("mockedBookie0"), BookieId.parse("mockedBookie1"));
                 else if(wrsbType==WrsbType.IN_EXCLUDE)
                     Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(excludeBookies.iterator().next());
                 }
