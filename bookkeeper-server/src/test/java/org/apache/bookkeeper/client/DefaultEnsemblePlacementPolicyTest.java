@@ -28,7 +28,7 @@ public class DefaultEnsemblePlacementPolicyTest {
 
 
 
-    @Parameterized.Parameters
+    /*@Parameterized.Parameters
     public static Collection<Object[]> getTestParameters() {
         return Arrays.asList(new Object[][]{ // ensebmleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookieSetType, expected
                 //0 - ensembleSize -1, writeQuorumSize -1, ackQuorumSize -1, no metadata, empty set-> IllegalArgumentException for the -1
@@ -62,8 +62,30 @@ public class DefaultEnsemblePlacementPolicyTest {
         this.expected = expected;
     }
 
+    @Test
+    public void newEnsembleTest(){
+        EnsemblePlacementPolicy esp;
+        EnsemblePlacementPolicy.PlacementResult<List<BookieId>> ensembleBookies;
+        try {
 
-    /*//Nuove tuple + tuple vecchie modificate a seguito della prima evoluzione dei casi di test
+            //use reflection to access private attribute knownBookies
+            Field knownBookiesAttribute = DefaultEnsemblePlacementPolicy.class.getDeclaredField("knownBookies");
+            knownBookiesAttribute.setAccessible(true);
+            esp = new DefaultEnsemblePlacementPolicy();
+            //set knownBookies attribute with reflection
+            knownBookiesAttribute.set(esp, createDummyHashSet(7, true));
+
+            ensembleBookies = esp.newEnsemble(ensembleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookies);
+            System.out.println("Created " + ensembleBookies.getResult().size() +" bookies.");
+            Assert.assertEquals(expected, ensembleBookies.getResult().size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.assertEquals(expected.getClass(), e.getClass());
+        }
+    }*/
+
+
+    //Nuove tuple + tuple vecchie modificate a seguito della prima evoluzione dei casi di test
     @Parameterized.Parameters
     public static Collection<Object[]> getTestParameters() {
         return Arrays.asList(new Object[][]{ // ensebmleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookieSetType, isWeighted, expected
@@ -76,7 +98,7 @@ public class DefaultEnsemblePlacementPolicyTest {
                 //3 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 1, no metadata, null set, false -> NullPointerException
                 {1, 1, 1, new HashMap<>(), null, false, new NullPointerException()},
                 //4 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 1, no metadata, set con un bookie, false -> Ensemble with 1 bookie
-                {1, 1, 1, new HashMap<>(), DefaultEnsemblePlacementPolicyUtils.createDummyHashSet(1), false, 1},
+                {1, 1, 1, new HashMap<>(), DefaultEnsemblePlacementPolicyUtils.createDummyHashSet(1, true), false, 1},
                 //5 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 2, no metadata, empty set, false -> Illegal argument exception ackQuorumSize > writeQuorumSize -> Bug lui crea tranquillamente l'insieme con 1 bookie
                 //{1, 1, 2, new HashMap<>(), new HashSet<>(), false, new IllegalArgumentException()},
                 //6 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 2, no metadata, empty set, false -> Illegal argument exception writeQuorumSize > ensembleSize -> Bug lui crea tranquillamente l'insieme con 1 bookie
@@ -94,11 +116,11 @@ public class DefaultEnsemblePlacementPolicyTest {
                 //11 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 1, no metadata, empty set, true -> Ensemble with 1 bookie
                 {1, 1, 1, new HashMap<>(), new HashSet<>(), true, 1},
                 //12 - ensembleSize 1, writeQuorumSize 1, ackQuorumSize 1, no metadata, set con un bookie, true -> Ensemble with 1 bookie
-                {1, 1, 1, new HashMap<>(), DefaultEnsemblePlacementPolicyUtils.createDummyHashSet(1), true, 1},
+                {1, 1, 1, new HashMap<>(), DefaultEnsemblePlacementPolicyUtils.createDummyHashSet(1, true), true, 1},
         });
-    }*/
+    }
 
-    /*//Nuovo costruttore a seguito della prima evoluzione, per supportare isWeighted
+    //Nuovo costruttore a seguito della prima evoluzione, per supportare isWeighted
     public DefaultEnsemblePlacementPolicyTest(int ensembleSize, int writeQuorumSize, int ackQuorumSize, Map<String, byte[]> customMetadata, Set<BookieId> excludeBookies, boolean isWeighted, Object expected){
         this.ensembleSize = ensembleSize;
         this.writeQuorumSize = writeQuorumSize;
@@ -108,7 +130,41 @@ public class DefaultEnsemblePlacementPolicyTest {
         this.isWeighted = isWeighted;
         this.expected = expected;
     }
-     */
+
+    @Test
+    public void newEnsembleTest(){
+        EnsemblePlacementPolicy esp;
+        EnsemblePlacementPolicy.PlacementResult<List<BookieId>> ensembleBookies;
+        try {
+            //EVO 1 use reflection to access private attribute isWeighted
+            Field isWeightedAttribute = DefaultEnsemblePlacementPolicy.class.getDeclaredField("isWeighted");
+            isWeightedAttribute.setAccessible(true);
+            Field weightedBookiesAttribute = DefaultEnsemblePlacementPolicy.class.getDeclaredField("weightedSelection");
+            weightedBookiesAttribute.setAccessible(true);
+
+            //use reflection to access private attribute knownBookies
+            Field knownBookiesAttribute = DefaultEnsemblePlacementPolicy.class.getDeclaredField("knownBookies");
+            knownBookiesAttribute.setAccessible(true);
+            esp = new DefaultEnsemblePlacementPolicy();
+
+            //EVO 1 set isWeighted attribute with reflection
+            isWeightedAttribute.set(esp, isWeighted);
+            WeightedRandomSelectionImpl<BookieId> mockedWeightedRandomSelection = Mockito.mock(WeightedRandomSelectionImpl.class);
+            Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(BookieId.parse("mockedBookie"));
+            weightedBookiesAttribute.set(esp, mockedWeightedRandomSelection); //Necessario per non avere nullpointerexception
+
+            //set knownBookies attribute with reflection
+            knownBookiesAttribute.set(esp, createDummyHashSet(7, true));
+
+            ensembleBookies = esp.newEnsemble(ensembleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookies);
+            System.out.println("Created " + ensembleBookies.getResult().size() +" bookies.");
+            Assert.assertEquals(expected, ensembleBookies.getResult().size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.assertEquals(expected.getClass(), e.getClass());
+        }
+    }
+
 
     //Nuove tuple + tuple vecchie modificate a seguito della seconda evoluzione dei casi di test
     /*@Parameterized.Parameters
@@ -184,37 +240,5 @@ public class DefaultEnsemblePlacementPolicyTest {
         this.expected = expected;
     }*/
 
-    @Test
-    public void newEnsembleTest(){
-        EnsemblePlacementPolicy esp;
-        EnsemblePlacementPolicy.PlacementResult<List<BookieId>> ensembleBookies;
-        try {
-            /*//EVO 1 use reflection to access private attribute isWeighted
-            Field isWeightedAttribute = DefaultEnsemblePlacementPolicy.class.getDeclaredField("isWeighted");
-            isWeightedAttribute.setAccessible(true);
-            Field weightedBookiesAttribute = DefaultEnsemblePlacementPolicy.class.getDeclaredField("weightedSelection");
-            weightedBookiesAttribute.setAccessible(true);*/
 
-            //use reflection to access private attribute knownBookies
-            Field knownBookiesAttribute = DefaultEnsemblePlacementPolicy.class.getDeclaredField("knownBookies");
-            knownBookiesAttribute.setAccessible(true);
-            esp = new DefaultEnsemblePlacementPolicy();
-
-            /*//EVO 1 set isWeighted attribute with reflection
-            isWeightedAttribute.set(esp, isWeighted);
-            WeightedRandomSelectionImpl<BookieId> mockedWeightedRandomSelection = Mockito.mock(WeightedRandomSelectionImpl.class);
-            Mockito.when(mockedWeightedRandomSelection.getNextRandom()).thenReturn(BookieId.parse("mockedBookie"));
-            weightedBookiesAttribute.set(esp, mockedWeightedRandomSelection); //Necessario per non avere nullpointerexception*/
-
-            //set knownBookies attribute with reflection
-            knownBookiesAttribute.set(esp, createDummyHashSet(7, true));
-
-            ensembleBookies = esp.newEnsemble(ensembleSize, writeQuorumSize, ackQuorumSize, customMetadata, excludeBookies);
-            System.out.println("Created " + ensembleBookies.getResult().size() +" bookies.");
-            Assert.assertEquals(expected, ensembleBookies.getResult().size());
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.assertEquals(expected.getClass(), e.getClass());
-        }
-    }
 }
