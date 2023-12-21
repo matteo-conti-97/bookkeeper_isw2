@@ -7,7 +7,7 @@ analyze with badua ->
 mvn clean verify  -P badua-coverage-offline
 
 analyze with jacoco ->
-mvn clean verify sonar:sonar -Dsonar.login=242c9ea28d460a91ae9944f43100fd1676c62b91 -P jacoco-coverage-offline
+mvn clean verify sonar:sonar -Dsonar.login=eb3d8caf309ce0eab06eaf5d6b3ce907f7741124 -P jacoco-coverage-offline
 
 analyze with pitest ->
 mvn clean verify org.pitest:pitest-maven:mutationCoverage surefire:test -P pit-coverage
