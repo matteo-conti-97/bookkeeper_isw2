@@ -1,4 +1,4 @@
-name: Pit mutation coverage
+name: Pit
 on:
   push:
     branches:

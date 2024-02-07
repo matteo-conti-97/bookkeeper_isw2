@@ -1,4 +1,4 @@
-name: Jacoco coverage with Sonar
+name: Jacoco
 on:
   push:
     branches:

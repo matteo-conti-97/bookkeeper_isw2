@@ -1,4 +1,4 @@
-name: Badua coverage
+name: Badua
 on:
   push:
     branches:
