@@ -1,0 +1,23 @@
+setup badua->
+mvn install:install-file -DgroupId=br.usp.each.saeg -DartifactId=ba-dua-cli -Dversion=0.4.0 -Dclassifier=all -Dpackaging=jar -Dfile="./jars/ba-dua-cli-0.4.0-all.jar"
+mvn install:install-file -DgroupId=br.usp.each.saeg -DartifactId=ba-dua-agent-rt -Dversion=0.4.0 -Dclassifier=all -Dpackaging=jar -Dfile="./jars/ba-dua-agent-rt-0.4.0-all.jar"
+
+setup jacoco->
+Per jacoco è necessario avere un container docker su cui gira un server sonarqube, il docker-compose per
+buildare il container è presente nel progetto. Una volta lanciato il container è necessario collegarsi alla porta 9000
+in localhost per accedere all'interfaccia web di sonarqube tramite la quale va generato il token da passare al comando
+di build maven quando si utilizza il profilo jacoco-coverage-offline. Per generare il token occorre effettuare il login
+con credenziali "admin" "admin" e successivamente dalla schermata home andare su "Administration" -> "MyAccount" -> "Security".
+
+analyze with badua ->
+mvn clean verify  -P badua-coverage-offline
+
+analyze with jacoco ->
+mvn clean verify sonar:sonar -Dsonar.login=eb3d8caf309ce0eab06eaf5d6b3ce907f7741124 -P jacoco-coverage-offline
+
+analyze with pitest ->
+mvn clean verify org.pitest:pitest-maven:mutationCoverage surefire:test -P pit-coverage
+
+run failsafe tests -> mvn clean verify -P failsafe-it
+
+Questi profili vengono comunque lanciati in modo automatico tramite Github Actions.
