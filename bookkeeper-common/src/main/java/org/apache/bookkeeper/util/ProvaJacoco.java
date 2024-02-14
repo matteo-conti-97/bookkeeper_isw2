@@ -2,7 +2,8 @@ package org.apache.bookkeeper.util;
 
 public class ProvaJacoco {
     public boolean isPalindrome(String inputString) {
-        if (inputString.length() == 0) {
+        int a=0;
+        if ((inputString.length() == 0)&&(inputString!=null)&&(a==0)) {
             return true;
         } else {
             char firstChar = inputString.charAt(0);
